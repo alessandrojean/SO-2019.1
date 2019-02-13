@@ -1,0 +1,11 @@
+slides/
+pdfs/
+bin/
+.vscode/
+*.zip
+*.exe
+*.out
+*.o
+*.d
+*.pdf
+
