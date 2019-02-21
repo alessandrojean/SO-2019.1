@@ -18,6 +18,9 @@ Algorithms written in the laboratory classes of Operating Systems
 - **13/02/2018** *(Theory)*: Processes and Threads.
 - **18/02/2018** *(Theory)*: IPC, Race Conditions, Critical Regions, 
       Semaphores, Mutex and Monitors.
+- **20/02/2018** *(Theory)*: Scheduling in Batch, Interactive and Real-Time
+      Systems, Thread Scheduling and Classical IPC Problems.
+      
 
 ## Bibliography
 
