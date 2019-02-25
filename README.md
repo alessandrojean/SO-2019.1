@@ -8,19 +8,19 @@ Algorithms written in the laboratory classes of Operating Systems
 [year]: https://img.shields.io/badge/year-2019.1-blue.svg?style=flat-square
 [id]: https://img.shields.io/badge/id-MCTA026--13-yellowgreen.svg?style=flat-square
 [tpi]: https://img.shields.io/badge/T--P--I-3--1--4-lightgrey.svg?style=flat-square
-[last-class]: https://img.shields.io/badge/last_class-2019.02.13-green.svg?style=flat-square
+[last-class]: https://img.shields.io/badge/last_class-2019.02.25-green.svg?style=flat-square
 [language]: https://img.shields.io/badge/language-C-yellow.svg?style=flat-square
 [ide]: https://img.shields.io/badge/IDE-VSCode-orange.svg?style=flat-square
 
 ## Classes
 
-- **11/02/2018** *(Theory)*: Introduction.
-- **13/02/2018** *(Theory)*: Processes and Threads.
-- **18/02/2018** *(Theory)*: IPC, Race Conditions, Critical Regions, 
+- **11/02/2019** *(Theory)*: Introduction.
+- **13/02/2019** *(Theory)*: Processes and Threads.
+- **18/02/2019** *(Theory)*: IPC, Race Conditions, Critical Regions, 
       Semaphores, Mutex and Monitors.
-- **20/02/2018** *(Theory)*: Scheduling in Batch, Interactive and Real-Time
+- **20/02/2019** *(Theory)*: Scheduling in Batch, Interactive and Real-Time
       Systems, Thread Scheduling and Classical IPC Problems.
-      
+- **25/02/2019** *(Theory)*: Memory Management.
 
 ## Bibliography
 
