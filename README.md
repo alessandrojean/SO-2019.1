@@ -21,6 +21,7 @@ Algorithms written in the laboratory classes of Operating Systems
 - **20/02/2019** *(Theory)*: Scheduling in Batch, Interactive and Real-Time
       Systems, Thread Scheduling and Classical IPC Problems.
 - **25/02/2019** *(Theory)*: Memory Management.
+- **27/02/2019** *(Laboratory)*: First Case Study: Linux.
 
 ## Bibliography
 
