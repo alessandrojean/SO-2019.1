@@ -8,7 +8,7 @@ Algorithms written in the laboratory classes of Operating Systems
 [year]: https://img.shields.io/badge/year-2019.1-blue.svg?style=flat-square
 [id]: https://img.shields.io/badge/id-MCTA026--13-yellowgreen.svg?style=flat-square
 [tpi]: https://img.shields.io/badge/T--P--I-3--1--4-lightgrey.svg?style=flat-square
-[last-class]: https://img.shields.io/badge/last_class-2019.02.25-green.svg?style=flat-square
+[last-class]: https://img.shields.io/badge/last_class-2019.03.13-green.svg?style=flat-square
 [language]: https://img.shields.io/badge/language-C-yellow.svg?style=flat-square
 [ide]: https://img.shields.io/badge/IDE-VSCode-orange.svg?style=flat-square
 
@@ -22,6 +22,7 @@ Algorithms written in the laboratory classes of Operating Systems
       Systems, Thread Scheduling and Classical IPC Problems.
 - **25/02/2019** *(Theory)*: Memory Management.
 - **27/02/2019** *(Laboratory)*: First Case Study: Linux.
+- **13/03/2019** *(Laboratory)*: Scheduling in Linux.
 
 ## Bibliography
 
