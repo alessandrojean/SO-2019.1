@@ -9,3 +9,8 @@ bin/
 *.d
 *.pdf
 
+# LaTeX stuff.
+definition.tex
+*.aux
+*.log
+*.synctex.gz
