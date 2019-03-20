@@ -8,7 +8,7 @@ Algorithms written in the laboratory classes of Operating Systems
 [year]: https://img.shields.io/badge/year-2019.1-blue.svg?style=flat-square
 [id]: https://img.shields.io/badge/id-MCTA026--13-yellowgreen.svg?style=flat-square
 [tpi]: https://img.shields.io/badge/T--P--I-3--1--4-lightgrey.svg?style=flat-square
-[last-class]: https://img.shields.io/badge/last_class-2019.03.18-green.svg?style=flat-square
+[last-class]: https://img.shields.io/badge/last_class-2019.03.20-green.svg?style=flat-square
 [language]: https://img.shields.io/badge/language-C-yellow.svg?style=flat-square
 [ide]: https://img.shields.io/badge/IDE-VSCode-orange.svg?style=flat-square
 
@@ -25,9 +25,36 @@ Algorithms written in the laboratory classes of Operating Systems
 - **13/03/2019** *(Laboratory)*: [Scheduling in Linux].
 - **18/03/2019** *(Theory)*: Page Replacement Algorithms and Design Issues
       for Paging Systems.
+- **20/03/2019** *(Laboratory)*: Memory Management in Linux.
 
 [First Case Study: Linux]: laboratory/2019.02.27/
 [Scheduling in Linux]: laboratory/2019.03.13/
+
+## Build instructions
+
+Use the following commands to compile any `.c` file in this repository.
+
+```bash
+# Assuming you have the GNU C Compiler in
+# your PATH, but can be MinGW or the Visual
+# Studio compiler too if you are under an 
+# Windows environment.
+
+# Compiles the file in the folder.
+# Be sure to check if the program needs
+# the -pthread or -lm option.
+$ gcc -o file file.c
+# Run the program.
+$ ./file
+```
+
+If you use [Visual Studio Code], you can setup your envinroment using 
+[tasks] and the Microsoft official [C/C++ extension], that allows you 
+to debug and lint your code.
+
+[Visual Studio Code]: https://code.visualstudio.com
+[tasks]: https://code.visualstudio.com/docs/editor/tasks
+[C/C++ extension]: https://code.visualstudio.com/docs/languages/cpp
 
 ## Bibliography
 
@@ -40,7 +67,7 @@ Algorithms written in the laboratory classes of Operating Systems
 
     The MIT License (MIT)
 
-    Copyright (c) 2018 Alessandro Jean
+    Copyright (c) 2019 Alessandro Jean
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in
