@@ -25,10 +25,11 @@ Algorithms written in the laboratory classes of Operating Systems
 - **13/03/2019** *(Laboratory)*: [Scheduling in Linux].
 - **18/03/2019** *(Theory)*: Page Replacement Algorithms and Design Issues
       for Paging Systems.
-- **20/03/2019** *(Laboratory)*: Memory Management in Linux.
+- **20/03/2019** *(Laboratory)*: [Memory Management in Linux].
 
 [First Case Study: Linux]: laboratory/2019.02.27/
 [Scheduling in Linux]: laboratory/2019.03.13/
+[Memory Management in Linux]: laboratory/2019.03.20/
 
 ## Build instructions
 
