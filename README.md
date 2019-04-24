@@ -37,10 +37,12 @@ Algorithms written in the laboratory classes of Operating Systems
       Device Drivers, I/O Software and Disk Hardware.
 - **15/04/2019** *(Theory)*: Disk Formatting, Arm Scheduling Algorithms,
       Error Handling and Clocks.
+- **17/04/2019** *(Laboratory)*: [File Systems in Linux].
 
 [First Case Study: Linux]: laboratory/2019.02.27/
 [Scheduling in Linux]: laboratory/2019.03.13/
 [Memory Management in Linux]: laboratory/2019.03.20/
+[File Systems in Linux]: laboratory/2019.04.17/
 
 ## Build instructions
 
