@@ -8,7 +8,7 @@ Algorithms written in the laboratory classes of Operating Systems
 [year]: https://img.shields.io/badge/year-2019.1-blue.svg?style=flat-square
 [id]: https://img.shields.io/badge/id-MCTA026--13-yellowgreen.svg?style=flat-square
 [tpi]: https://img.shields.io/badge/T--P--I-3--1--4-lightgrey.svg?style=flat-square
-[last-class]: https://img.shields.io/badge/last_class-2019.03.20-green.svg?style=flat-square
+[last-class]: https://img.shields.io/badge/last_class-2019.03.25-green.svg?style=flat-square
 [language]: https://img.shields.io/badge/language-C-yellow.svg?style=flat-square
 [ide]: https://img.shields.io/badge/IDE-VSCode-orange.svg?style=flat-square
 
@@ -26,10 +26,11 @@ Algorithms written in the laboratory classes of Operating Systems
 - **18/03/2019** *(Theory)*: Page Replacement Algorithms and Design Issues
       for Paging Systems.
 - **20/03/2019** *(Laboratory)*: [Memory Management in Linux].
+- **25/03/2019** *(Theory)*: **First test**.
 
 [First Case Study: Linux]: laboratory/2019.02.27/
 [Scheduling in Linux]: laboratory/2019.03.13/
-[Memory Management in Linux]: laboratory/2019.03.20/
+[Memory Management in Linux]: laboratory/2019.03.20/a
 
 ## Build instructions
 
