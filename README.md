@@ -8,7 +8,7 @@ Algorithms written in the laboratory classes of Operating Systems
 [year]: https://img.shields.io/badge/year-2019.1-blue.svg?style=flat-square
 [id]: https://img.shields.io/badge/id-MCTA026--13-yellowgreen.svg?style=flat-square
 [tpi]: https://img.shields.io/badge/T--P--I-3--1--4-lightgrey.svg?style=flat-square
-[last-class]: https://img.shields.io/badge/last_class-2019.04.10-green.svg?style=flat-square
+[last-class]: https://img.shields.io/badge/last_class-2019.04.15-green.svg?style=flat-square
 [language]: https://img.shields.io/badge/language-C-yellow.svg?style=flat-square
 [ide]: https://img.shields.io/badge/IDE-VSCode-orange.svg?style=flat-square
 
@@ -35,6 +35,8 @@ Algorithms written in the laboratory classes of Operating Systems
       Software, Programmed I/O, Interrupt-Driven I/O and I/O using DMA.
 - **10/04/2019** *(Theory)*: I/O Software Layers, Interrupt Handlers,
       Device Drivers, I/O Software and Disk Hardware.
+- **15/04/2019** *(Theory)*: Disk Formatting, Arm Scheduling Algorithms,
+      Error Handling and Clocks.
 
 [First Case Study: Linux]: laboratory/2019.02.27/
 [Scheduling in Linux]: laboratory/2019.03.13/
