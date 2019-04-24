@@ -8,7 +8,7 @@ Algorithms written in the laboratory classes of Operating Systems
 [year]: https://img.shields.io/badge/year-2019.1-blue.svg?style=flat-square
 [id]: https://img.shields.io/badge/id-MCTA026--13-yellowgreen.svg?style=flat-square
 [tpi]: https://img.shields.io/badge/T--P--I-3--1--4-lightgrey.svg?style=flat-square
-[last-class]: https://img.shields.io/badge/last_class-2019.03.27-green.svg?style=flat-square
+[last-class]: https://img.shields.io/badge/last_class-2019.04.01-green.svg?style=flat-square
 [language]: https://img.shields.io/badge/language-C-yellow.svg?style=flat-square
 [ide]: https://img.shields.io/badge/IDE-VSCode-orange.svg?style=flat-square
 
@@ -29,10 +29,12 @@ Algorithms written in the laboratory classes of Operating Systems
 - **25/03/2019** *(Theory)*: **First test**.
 - **27/03/2019** *(Theory)*: File Systems: Files, Directories and File-System
       Implementation.
+- **01/04/2019** *(Theory)*: File-System Management and Optimization,
+      Disk-Space Management, File-System Backups, Consistency and Performance.
 
 [First Case Study: Linux]: laboratory/2019.02.27/
 [Scheduling in Linux]: laboratory/2019.03.13/
-[Memory Management in Linux]: laboratory/2019.03.20/a
+[Memory Management in Linux]: laboratory/2019.03.20/
 
 ## Build instructions
 
