@@ -1,0 +1,390 @@
+% !TeX program = xelatex
+% !TeX encoding = UTF-8
+\documentclass[a4paper, 11pt, answers]{exam}
+
+\usepackage[brazil]{babel}
+\let\latinencoding\relax
+\usepackage[T1]{fontenc}
+
+\usepackage[no-math]{fontspec}
+\usepackage{newpxtext, newpxmath}
+\usepackage[a4paper, margin=2cm]{geometry}
+
+\usepackage{siunitx}
+\usepackage{fancyvrb}
+\usepackage{graphicx}
+
+\input{definition.tex}
+
+\title{\titulo}
+\author{\nomeAutorUm e \nomeAutorDois}
+\date{\today}
+
+\footer{}{}{\thepage}
+
+\sisetup{
+  binary-units = true
+}
+
+\renewcommand{\solutiontitle}{}
+
+\fvset{
+  gobble = 8,
+  frame = single
+}
+
+\newcommand{\printtitle}{
+  \begin{center}
+    {\Large \scshape \titulo}\\[1em]
+    {\nomeAutorUm, \raAutorUm}\\
+    {\nomeAutorDois, \raAutorDois}\\[1em]
+    Professor: Dr\@. \nomeProfessor, \centroProfessor\\
+    {\itshape \campusFaculdade}
+  \end{center}
+}
+
+\begin{document}
+  \printtitle
+
+  \begin{questions}
+    \question
+    Algoritmos para alocação de memória livre.
+
+    \begin{parts}
+      \part
+      Compile e execute o programa \verb|prog1.c|. Que algoritmo de
+      alocação de memória livre foi usado para \verb|s5| e \verb|s6|?
+      Justifique.
+
+      \begin{solution}
+        A estratégia interna que o sistema de alocação de memória livre usa
+        dentro do espaço de endereçamento do processo é o \emph{best-fit},
+        já que utiliza-se a menor lacuna disponível na memória livre para
+        o alocamento das novas variáveis do programa.
+
+        \begin{Verbatim}[label={\$ ./prog1}]
+        Size of int: 4 bytes
+        Aloca s1: 0xd0d420
+        Aloca s2: 0xd0d5c0
+        Aloca s3: 0xd0d690
+        Aloca s4: 0xd0d790
+        Libera s1.
+        Libera s3.
+        Aloca s5: 0xd0d690
+        Aloca s6: 0xd0d6b0
+        \end{Verbatim}
+      \end{solution}
+    \end{parts}
+
+    \question
+    Descobrindo o tamanho de página.
+
+    \begin{parts}
+      \part
+      Compile e execute o programa \verb|prog2.c| com a \emph{flag}
+      \verb|-lm| após \verb|prog2.c|. Qual o tamanho de página do
+      sistema obtida pela chamada de sistema \verb|getpagesize|?
+
+      \begin{solution}
+        O tamanho de página do sistema obtida pela chamada de sistema
+        é de \SI{4}{\kilo\byte}, ou \SI{4096}{\byte}, tendo \SI{12}{\bit}.
+        O tamanho máximo do espaço de endereçamento é de \SI{64}{\bit}.
+        
+        \begin{Verbatim}[label={\$ ./prog2}]
+        Endereço de global: 0x60104c
+        Tamanho de uma página 0x1000, 12 bits
+        Endereço: 8 bytes, 64 bits
+        \end{Verbatim}
+      \end{solution}
+
+      \part
+      Instale o pacote \verb|hugepages| e descubra o tamanho das páginas
+      suportadas com o comando \verb|pagesize -a|. Por que é importante
+      suportar outros tamanhos de página, além do padrão?
+
+      \begin{solution}
+        A vantagem de suportar páginas maiores é diminuir a quantidade
+        de páginas, tornando mais barato trabalhar com um número
+        menor de páginas; a tabela fica menor, sendo mais fácil
+        de ser varrida, facilitando o gerenciamento e aumentando
+        as chances de ter um \emph{cache heap} na TLB.
+
+        \begin{Verbatim}[label={\$ pagesize -a}]
+        4096
+        2097152
+        \end{Verbatim}
+      \end{solution}
+    \end{parts}
+
+    \question
+    Alterando o tamanho do segmento de dados.
+
+    \begin{parts}
+      \part
+      Compile e execute o programa \verb|prog3.c|. Remova o comentário
+      abaixo de ``Acarretaria \linebreak SEGMENTATION\_FAULT'' e recompile e reexecute
+      o programa. Por que ocorreu um \emph{segmentation fault}?
+
+      \begin{solution}
+        Ocorre um \emph{segmentation fault} pois aumenta-se um número
+        menor do que uma página, então acaba-se acessando a próxima
+        página, gerando a falha. Como retorna-se uma página inteira
+        imediatamente antes, acaba-se acessando a próxima página,
+        gerando a falha. O segundo caso não ocasiona falhas pois está
+        no meio da página, não causando que o byte fique fora da
+        área de dados. O mínimo a ser alocado é uma página, não há
+        como alocar, por exemplo, $1/4$ de página.
+
+        \begin{Verbatim}[label={\$ ./prog3}]
+        Tamanho em bytes de um endereço: 8
+        Tamanho em bytes de uma página: 4096
+        str_pilha  = 0x7ffe1729a08e
+        main       = 0x400666
+        str_dados  = 0x601060
+        Topo da área de dados = 0x1e30000
+        Topo da área de dados = 0x1e31000
+        Topo da área de dados = 0x1e31400          
+        \end{Verbatim}
+
+        \begin{Verbatim}[label={\$ ./prog3}]
+        Tamanho em bytes de um endereço: 8
+        Tamanho em bytes de uma página: 4096
+        str_pilha  = 0x7fffcf39e30e
+        main       = 0x400666
+        str_dados  = 0x601060
+        Topo da área de dados = 0x225e000
+        Topo da área de dados = 0x225f000
+        Falha de segmentação (imagem do núcleo gravada)       
+        \end{Verbatim}
+      \end{solution}
+    \end{parts}
+
+    \question
+    Memória compartilhada.
+
+    \begin{parts}
+      \part
+      Compile e execute o programa \verb|prog4.c|. Examine o conteúdo do
+      arquivo \verb|teste_mmap.txt|. Quais as vantagens e desvantagens de
+      se mapear um arquivo em memória?
+
+      \begin{solution}
+        O conteúdo do arquivo contém a frase, no entanto, como mapeia-se
+        \SI{100}{\byte} da memória, o resto do arquivo são resíduos. Pode-se
+        utilizar este arquivo para comunicar-se entre processos. A leitura
+        do arquivo em memória é muito mais rápida. No entanto, a complexidade
+        é maior e pode possibilitar o acontecimento de condições de corrida.
+        Pode ocorrer um problema de falha onde há atualização na memória
+        mas não em disco também.
+
+        \begin{Verbatim}[label={\$ sudo less teste\_mmap.txt}]
+        Testando mmap novamente.
+        \end{Verbatim}
+      \end{solution}
+
+      \part
+      Compile e execute o programa \verb|prog5.c|. O que aconteceu com o
+      conteúdo do arquivo \verb|teste_mmap.txt|?
+
+      \begin{solution}
+        Troca-se uma letra do arquivo de saída, o \verb|teste_mmap.txt|.
+        Em tese, pode-se ter mais de um processo rodando e todos
+        podem estar escrevendo no mesmo arquivo. No entanto, torna-se
+        necessário criar um mecanismo de exclusão mútua para evitar
+        que um sobreescreva o outro.
+
+        \begin{Verbatim}[label={\$ sudo less teste\_mmap.txt}]
+        Teztando mmap novamente.
+        \end{Verbatim}
+      \end{solution}
+    \end{parts}
+
+    \question
+    Verificando a quantidade de faltas de páginas.
+
+    \begin{parts}
+      \part
+      Compile e execute o programa \verb|prog6.c|. O laço usado na função
+      \verb|preenche_lento| é a forma mais eficiente de iteração sobre
+      uma matriz? Justifique.
+
+      \begin{solution}
+        O programa possui uma complexidade quadrática, realizando
+        $3.2$ bilhões de operações. Portanto, o laço usado na função
+        não é a forma mais eficiente de iteração sobre uma matriz.
+        Como a matriz é varrida no sentido errado, coluna em vez de linha
+        a cada iteração, lê-se uma página toda vez, já que cada
+        linha é uma página. Desta maneira, há um \emph{miss} na TLB e no
+        \emph{cache} do processador.
+
+        \begin{Verbatim}[label={\$ /usr/bin/time -v ./prog6}]
+        Topo da área de dados = 0xc4ca2000
+        Inicio preenche lento.
+        Fim preenche lento.
+        Falhas de página sem ida ao disco: 800058
+        Falhas de página com ida ao disco: 0
+
+                Command being timed: "./prog6"
+                User time (seconds): 47.43
+                System time (seconds): 0.68
+                Percent of CPU this job got: 99%
+                Elapsed (wall clock) time (h:mm:ss or m:ss): 0:48.12
+                Average shared text size (kbytes): 0
+                Average unshared data size (kbytes): 0
+                Average stack size (kbytes): 0
+                Average total size (kbytes): 0
+                Maximum resident set size (kbytes): 3201332
+                Average resident set size (kbytes): 0
+                Major (requiring I/O) page faults: 0
+                Minor (reclaiming a frame) page faults: 800059
+                Voluntary context switches: 1
+                Involuntary context switches: 81
+                Swaps: 0
+                File system inputs: 0
+                File system outputs: 0
+                Socket messages sent: 0
+                Socket messages received: 0
+                Signals delivered: 0
+                Page size (bytes): 4096
+                Exit status: 0
+        \end{Verbatim}
+      \end{solution}
+
+      \part
+      Modifique o programa \verb|prog6.c| para aumentar o desempenho
+      do laço. Houve redução no número de faltas de página em relação
+      ao programa anterior? Justifique.
+
+      \begin{solution}
+        Não houve mudança no número de faltas de página, já que só
+        há uma mudança de impacto na TLB, em relação ao processador
+        e ao \emph{cache}. A diferença é que quando acessa-se um elemento
+        na mesma página, há um \emph{hit} na TLB, atingindo o \emph{cache}
+        L1 do processador, gerando essa diferença brutal em questões
+        de processamento e desempenho.
+
+        \begin{Verbatim}[label={\$ /usr/bin/time -v ./prog6}]
+        Topo da área de dados = 0xc4071000
+        Inicio preenche lento.
+        Fim preenche lento.
+        Falhas de página sem ida ao disco: 800058
+        Falhas de página com ida ao disco: 0
+      
+                Command being timed: "./prog6-e"
+                User time (seconds): 6.84
+                System time (seconds): 0.61
+                Percent of CPU this job got: 99%
+                Elapsed (wall clock) time (h:mm:ss or m:ss): 0:07.45
+                Average shared text size (kbytes): 0
+                Average unshared data size (kbytes): 0
+                Average stack size (kbytes): 0
+                Average total size (kbytes): 0
+                Maximum resident set size (kbytes): 3201304
+                Average resident set size (kbytes): 0
+                Major (requiring I/O) page faults: 0
+                Minor (reclaiming a frame) page faults: 800059
+                Voluntary context switches: 1
+                Involuntary context switches: 12
+                Swaps: 0
+                File system inputs: 0
+                File system outputs: 0
+                Socket messages sent: 0
+                Socket messages received: 0
+                Signals delivered: 0
+                Page size (bytes): 4096
+                Exit status: 0
+        \end{Verbatim}
+      \end{solution}
+    \end{parts}
+
+    \question
+    Estatísticas.
+
+    \begin{parts}
+      \part
+      Use o comando \verb|ps -o min_flt,maj_flt,cmd PID| para enxergar
+      as estatísticas de falta de páginas de um processo \verb|PID|.
+
+      \begin{solution}
+        Utilizou-se como exemplo o \verb|PID| do Firefox recém-aberto.
+
+        \begin{Verbatim}[label={\$ ps -o min\_flt,maj\_flt,cmd 10628}]
+         MINFL  MAJFL CMD
+        151024      0 /usr/lib/firefox/firefox
+        \end{Verbatim}
+      \end{solution}
+
+      \part
+      Use o comando \verb|top|, tecle \verb|F| e selecione as faltas
+      de página.
+
+      \begin{solution}
+        Selecionou-se no menu as opções \verb|nMaj| e \verb|nMin|.
+
+        \begin{Verbatim}[label={\$ top}, fontsize=\scriptsize]
+        top - 09:52:41 up  2:31,  1 user,  load average: 0,36, 0,25, 0,25
+        Tarefas: 220 total,   1 executando, 219 dormindo,   0 parado,   0 zumbi
+        %Cpu(s):  0,9 us,  0,3 sy,  0,0 ni, 97,5 id,  1,3 wa,  0,0 hi,  0,0 si,  0,0 st
+        KiB Mem :  8058996 total,  3070176 free,  1448752 used,  3540068 buff/cache
+        KiB Swap:  8270844 total,  8261140 free,     9704 used.  5804584 avail Mem 
+        
+          PID USUÁRIO  PR  NI    VIRT    RES    SHR S  %CPU     TIME+ COMMAND        %MEM nMaj nMin 
+          927 root      20   0  600180 127036  97172 S   3,3   2:15.24 Xorg            1,6   81 135k 
+         8043 ufabc     20   0  668176  39364  29984 S   2,0   0:02.57 gnome-termina+  0,5    0 5653 
+         1963 ufabc     20   0 1675732 233112  66148 S   1,7   1:46.08 compiz          2,9  170 147k 
+         7459 ufabc     20   0 1982960 304056  90920 S   0,3   4:06.66 code            3,8    0 2,4m 
+        10147 root      20   0       0      0      0 S   0,3   0:00.53 kworker/u8:0    0,0    0    0 
+        10593 ufabc     20   0   41872   3832   3204 R   0,3   0:00.50 top             0,0    2  304 
+        10752 ufabc     20   0 1532996 108004  82784 S   0,3   0:00.75 WebExtensions   1,3    0  14k 
+            1 root      20   0  119892   5740   4080 S   0,0   0:02.24 systemd         0,1   54  35k 
+            2 root      20   0       0      0      0 S   0,0   0:00.00 kthreadd        0,0    0    0 
+            3 root      20   0       0      0      0 S   0,0   0:00.02 ksoftirqd/0     0,0    0    0 
+            5 root       0 -20       0      0      0 S   0,0   0:00.00 kworker/0:0H    0,0    0    0 
+            7 root      20   0       0      0      0 S   0,0   0:06.86 rcu_sched       0,0    0    0 
+            8 root      20   0       0      0      0 S   0,0   0:00.00 rcu_bh          0,0    0    0 
+            9 root      rt   0       0      0      0 S   0,0   0:00.00 migration/0     0,0    0    0 
+           10 root      rt   0       0      0      0 S   0,0   0:00.02 watchdog/0      0,0    0    0 
+           11 root      rt   0       0      0      0 S   0,0   0:00.02 watchdog/1      0,0    0    0 
+           12 root      rt   0       0      0      0 S   0,0   0:00.00 migration/1     0,0    0    0 
+        \end{Verbatim}
+      \end{solution}
+
+      \part
+      Use o comando \verb|/usr/bin/time -v CMD| para obter estatísticas de um
+      programa executado \verb|CMD|.
+
+      \begin{solution}
+        Como exemplo, optou-se por utilizar o comando \verb|ls|.
+
+        \begin{Verbatim}[label={\$ /usr/bin/time -v ls}, fontsize=\small]
+        prog1    prog2    prog3    prog4    prog5    prog6    prog6-e    README.md
+        prog1.c  prog2.c  prog3.c  prog4.c  prog5.c  prog6.c  prog6-e.c  teste_mmap.txt
+
+                Command being timed: "ls"
+                User time (seconds): 0.00
+                System time (seconds): 0.00
+                Percent of CPU this job got: 0%
+                Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
+                Average shared text size (kbytes): 0
+                Average unshared data size (kbytes): 0
+                Average stack size (kbytes): 0
+                Average total size (kbytes): 0
+                Maximum resident set size (kbytes): 2412
+                Average resident set size (kbytes): 0
+                Major (requiring I/O) page faults: 0
+                Minor (reclaiming a frame) page faults: 108
+                Voluntary context switches: 1
+                Involuntary context switches: 1
+                Swaps: 0
+                File system inputs: 0
+                File system outputs: 0
+                Socket messages sent: 0
+                Socket messages received: 0
+                Signals delivered: 0
+                Page size (bytes): 4096
+                Exit status: 0
+        \end{Verbatim}
+      \end{solution}
+    \end{parts}
+  \end{questions}
+\end{document}
