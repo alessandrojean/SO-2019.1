@@ -1,0 +1,57 @@
+% !TeX program = xelatex
+% !TeX encoding = UTF-8
+\documentclass[a4paper, 11pt, answers]{exam}
+
+\usepackage[brazil]{babel}
+\let\latinencoding\relax
+\usepackage[T1]{fontenc}
+
+\usepackage[no-math]{fontspec}
+\usepackage{newpxtext, newpxmath}
+\usepackage[a4paper, margin=2cm]{geometry}
+
+\usepackage{siunitx}
+\usepackage{fancyvrb}
+
+\input{definition.tex}
+
+\title{\titulo}
+\author{\nomeAutorUm e \nomeAutorDois}
+\date{\today}
+
+\footer{}{}{\thepage}
+
+\sisetup{
+  binary-units = true
+}
+
+\renewcommand{\solutiontitle}{}
+
+\fvset{
+  gobble=4,
+  frame = single
+}
+
+\newcommand{\printtitle}{
+  \begin{center}
+    {\Large \scshape \titulo}\\[1em]
+    {\nomeAutorUm, \raAutorUm}\\
+    {\nomeAutorDois, \raAutorDois}\\[1em]
+    Professor: Dr\@. \nomeProfessor, \centroProfessor\\
+    {\itshape \campusFaculdade}
+  \end{center}
+}
+
+\begin{document}
+  \printtitle
+
+  \begin{questions}
+    \section*{Parte 01}
+    \input{part-01.tex}
+  \end{questions}
+
+  \begin{questions}
+    \section*{Parte 02}
+    \input{part-02.tex}
+  \end{questions}
+\end{document}

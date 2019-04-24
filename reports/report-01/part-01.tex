@@ -1,0 +1,330 @@
+\question
+Uso da chamada de sistema \verb|fork|.
+
+\begin{parts}
+  \part
+  Compile e execute o programa \verb|prog1.c|. Explique o seu
+  funcionamento, detalhando o uso das chamadas de sistema
+  usadas.
+
+  \begin{solution}
+    O programa cria uma cópia de si mesmo através da chamada de
+    \verb|fork|, obtendo como retorno um \verb|PID| para diferenciar
+    o processo pai do filho. O processo pai espera a execução do
+    filho terminar, através da chamada de \verb|waitpid|, obtendo
+    seu \emph{status}. Assim, é possível diferenciar se o filho
+    foi terminado normalmente, ou teve algum erro, ou foi morto
+    através de alguma chamada de \verb|kill|.
+
+    \begin{Verbatim}[label={\$ ./prog1}]
+    Pai com filho com PID 10111.
+    Aguardando término do filho!
+    Filho (PID 10111) vai dormir por 10 segundos.
+    Filho terminando a execução.
+    Pai viu filho com PID 10111 terminar.
+    Filho terminou com status = 0.
+    Pai terminando a execução.
+    \end{Verbatim}
+  \end{solution}
+
+  \part
+  Envie o sinal \verb|SIGINT| ao processo filho: 
+  \verb|kill -SIGINT PID|, em que \verb|PID| é o PID do processo
+  filho mostrado na tela. O que aconteceu nesse caso? Justifique.
+
+  \begin{solution}
+    Neste caso o processo filho foi terminado antes de seu término
+    de forma voluntária, sendo encerrado com sinal \verb|2|, o
+    \verb|SIGINT|, sendo equivalente ao \verb|Ctrl + C| em um terminal.
+
+    \begin{Verbatim}[label={\$ ./prog1}]
+    Pai com filho com PID 10250.
+    Aguardando término do filho!
+    Filho (PID 10250) vai dormir por 10 segundos.
+    Pai viu filho com PID 10250 terminar.
+    Filho foi morto por sinal 2.
+    Pai terminando a execução.
+    \end{Verbatim}
+  \end{solution}
+\end{parts}
+
+\question
+Sinais como condições de erro.
+
+\begin{parts}
+  \part
+  Compile e execute o programa \verb|prog2.c|. Por que o processo filho
+  é terminado?
+
+  \begin{solution}
+    O processo filho é terminado por causa de uma operação de divisão
+    por zero, forçando o programa a encerrar sua execução com um
+    sinal \verb|8|, o \verb|SIGFPE|.
+
+    \begin{Verbatim}[label={\$ ./prog2}]
+    Pai com filho com PID 10421.
+    Aguardando término do filho!
+    Pai viu filho com PID 10421 terminar.
+    Filho foi morto por sinal 8.
+    Pai terminando a execução.
+    \end{Verbatim}
+  \end{solution}
+
+  \part
+  Compile e execute o programa \verb|prog3.c|. Por que o processo filho
+  é terminado?
+
+  \begin{solution}
+    O processo filho é terminado por causa de um acesso a um endereço
+    de memória inválido, forçando o programa a encerrar sua execução
+    com o sinal \verb|11|, o \verb|SIGSEGV|.
+  
+    \begin{Verbatim}[label={\$ ./prog3}]
+    Pai com filho com PID 10490.
+    Aguardando término do filho!
+    Pai viu filho com PID 10490 terminar.
+    Filho foi morto por sinal 11.
+    Pai terminando a execução.
+    \end{Verbatim}
+  \end{solution}
+\end{parts}
+
+\question
+Como tratar um sinal?
+
+\begin{parts}
+  \part
+  Compile e execute o programa \verb|prog4.c|. Em uma segunda execução,
+  envie o sinal \verb|SIGINT| ao processo filho. Compare as duas execuções
+  e comente. O que é necessário fazer para tratar um sinal?
+
+  \begin{solution}
+    Como o programa possui um \emph{handler} para quando receber o
+    \verb|SIGINT|, quando o mesmo receber este sinal através de uma
+    chamada de \verb|kill|, o mesmo tratará este sinal com a função
+    \emph{handler}, não sendo interrompido e terminando com 
+    \emph{status} \verb|0|.
+
+    Para tratar um sinal é preciso criar uma função de \emph{handler}
+    e informá-la ao sistema de forma explicita atrtavés da chamada
+    de \verb|signal|, informando qual sinal deseja tratar e qual
+    a função \emph{handler}.
+
+    \begin{Verbatim}[label={\$ ./prog4}]
+    Pai com filho com PID 10691.
+    Aguardando término do filho!
+    Filho (PID 10691) vai dormir por 10 segundos.
+    Filho terminando a execução.
+    Pai viu filho com PID 10691 terminar.
+    Filho terminou com status = 0.
+    Pai terminando a execução.
+    \end{Verbatim}
+
+    \begin{Verbatim}[label={\$ ./prog4}]
+    Pai com filho com PID 10668.
+    Aguardando término do filho!
+    Filho (PID 10668) vai dormir por 10 segundos.
+    Tratando sinal SIGINT do processo 10668!
+    Na verdade, acho que não vou fazer nada! :-) 
+    Filho terminando a execução.
+    Pai viu filho com PID 10668 terminar.
+    Filho terminou com status = 0.
+    Pai terminando a execução.
+    \end{Verbatim}
+  \end{solution}
+
+  \part
+  Modifique o programa \verb|prog4.c| para tratar a condição de erro
+  do programa \verb|prog3.c|. Foi possível tratar o sinal e continuar
+  a execução? Justifique.
+
+  \begin{solution}
+    Não é possível tratar uma função de erro que necessariamente deve
+    forçar o programa a ser terminado. O sistema informa o programa
+    sobre o erro, o programa trata-o, no entanto o problema ainda
+    permanece, fazendo com que o programa fique em um \emph{loop}
+    infinito. Para evitar tal comportamento, pode-se encerrar o
+    programa na função de \emph{handler}, com, por exemplo, o
+    \verb|exit(13)|, gerando um \emph{status} de erro que pode
+    ser usado futuramente para \emph{debug}.
+
+    \begin{Verbatim}[label={\$ ./prog4-e}]
+    Pai com filho com PID 10958.
+    Aguardando término do filho!
+    Tratando sinal SIGSEGV do processo 10958!
+    Pai viu filho com PID 10958 terminar.
+    Filho terminou com status = 13.
+    Pai terminando a execução.
+    \end{Verbatim}
+  \end{solution}
+\end{parts}
+
+\question
+Como mascarar um sinal?
+
+\begin{parts}
+  \part
+  Compile e execute o programa \verb|prog5.c|. Durante sua execução, envie
+  o sinal \verb|SIGQUIT| ao processo filho. Em uma segunda execução, envie
+  o sinal \verb|SIGTERM| ao processo filho. Compare as duas execuções e
+  comente. O que é necessário fazer para mascarar um sinal?
+
+  \begin{solution}
+    A primeira execução não é terminada pois o mesmo possui uma máscara
+    para o sinal \verb|SIGQUIT|, ignorando solenimente o sinal, continuando
+    sua execução de uma forma normal. A segunda execução é terminada
+    pois o mesmo não possui uma máscara ou tratamento para o sinal
+    \verb|SIGTERM|, forçando o término do processo.
+
+    Para mascarar um sinal é necessário criar uma máscara e instalá-la
+    para o processo. Isto é feito através das chamadas a \verb|sigemptyset|,
+    \verb|sigaddset| e \verb|sigprocmask|.
+
+    \begin{Verbatim}[label={\$ ./prog5}]
+    Pai com filho com PID 11046.
+    Aguardando término do filho!
+    Filho (PID 11046) vai dormir por 10 segundos.
+    Filho terminando a execução.
+    Pai viu filho com PID 11046 terminar.
+    Filho terminou com status = 0.
+    Pai terminando a execução.
+    \end{Verbatim}
+
+    \begin{Verbatim}[label={\$ ./prog5}]
+    Pai com filho com PID 11035.
+    Aguardando término do filho!
+    Filho (PID 11035) vai dormir por 10 segundos.
+    Pai viu filho com PID 11035 terminar.
+    Filho foi morto por sinal 15.
+    Pai terminando a execução.
+    \end{Verbatim}
+  \end{solution}
+
+  \part
+  É possível tratar ou mascarar o sinal \verb|SIGKILL| ou \verb|SIGSTOP|?
+  Justifique.
+
+  \begin{solution}
+    Os sinais \verb|SIGKILL| e \verb|SIGSTOP| não podem ser tratados
+    nem mascarados pois deve existir a opção de matar ou pausar o processo,
+    respectivamente.
+  \end{solution}
+\end{parts}
+
+\question
+Criação de threads.
+
+\begin{parts}
+  \part
+  Compile com a opção \verb|-pthread| o programa \verb|prog6.c|. Execute-o
+  várias vezes e comente sobre as saídas. Explique o funcionamento 
+  do programa.
+
+  \begin{solution}
+    O programa cria 10 threads através de \verb|pthread_create|, esperando
+    que todos executem sua função e espera que todos terminem através
+    de \verb|pthread_join| para encerrar o programa. Cada execução do
+    programa vai ter uma ordem diferente de execução já que os threads
+    são escalonados de maneira independente pelo núcleo do sistema
+    operacional.
+    
+    \begin{Verbatim}[label={\$ ./prog6}]
+    Thread 2 executou.
+    Thread 1 executou.
+    Thread 0 executou.
+    Thread 3 executou.
+    Thread 4 executou.
+    Thread 5 executou.
+    Thread 6 executou.
+    Thread 8 executou.
+    Thread 9 executou.
+    Thread 7 executou.
+    Threads terminaram. Fim do programa.
+    \end{Verbatim}
+  \end{solution}
+
+  \part
+  Compile com a opção \verb|-pthread| o programa \verb|prog7.c|. 
+  Execute-o várias vezes e comente sobre as saídas. Qual a solução
+  para o problema apresentado?
+
+  \begin{solution}
+    Entre a atribuição e o valor da variável há uma decisão de 
+    escalonamento, além do fato do programa ter uma área de memória
+    compartilhada, gerando condições de corrida. A cada execução,
+    dependendo de quem e quando é executado, temos um resultado
+    diferente. Para solucionar este problema apresentado é preciso
+    implementar um mecanismo de exclusão mútua que limita somente
+    um thread a cada momento na região crítica.
+
+    \begin{Verbatim}[label={\$ ./prog7}]
+    Thread 0, s = 1.
+    Thread 1, s = 1.
+    \end{Verbatim}
+  \end{solution}
+\end{parts}
+
+\question
+Implementando a exclusão mútua.
+
+\begin{parts}
+  \part
+  Compile com a opção \verb|-pthread| o programa \verb|prog8.c|.
+  Execute-o várias vezes e comente sobre as saídas.
+
+  \begin{solution}
+    O programa protege a região crítica das duas threads, impedindo
+    com que ambas as threads executem ao mesmo tempo na região de 
+    memória compartilhada. Desta maneira, independentemente da decisão
+    de escalonamento, não há mais condições de corrida e a variável
+    \verb|s| sempre vai ter o valor esperado na impressão.
+
+    \begin{Verbatim}[label={\$ ./prog8}]
+    Thread 0, s = 0.
+    Thread 1, s = 1.
+    \end{Verbatim}
+  \end{solution}
+\end{parts}
+
+\question
+Produtor-consumidor com troca de mensagens.
+
+\begin{parts}
+  \part
+  Compile com a opção \verb|-o cons| o programa \verb|prog9c.c|.
+  Compile com a opção \verb|-o prod| o programa \verb|prog9p.c|.
+  Execute os programas \verb|cons| e \verb|prod| em diversas
+  combinações. Explique o funcionamento dos programas.
+
+  \begin{solution}
+    O produtor coloca uma mensagem na caixa-postal e o consumidor
+    retira esta mensagem. Caso a caixa-postal esteja vazia, o 
+    consumidor fica travado esperando por uma mensagem.
+
+    \begin{Verbatim}[label={\$ ./cons}]
+    Erro na criacao de mailbox: Success
+    o tipo da mensagem eh: 1
+    o conteudo da mensagem eh: Esta eh uma mensagem de teste
+    \end{Verbatim}
+
+    \begin{Verbatim}[label={\$ ./prod}]
+    erro na criacao de mailbox: Success
+    o resultado eh: 0
+    \end{Verbatim}
+  \end{solution}
+
+  \part
+  Modifique os programas \verb|prog9c.c| e \verb|prog9p.c| para
+  implementar o sistema produtor consumidor com $N$ mensagens
+  da Figura 2.29 do livro texto (Aula 3 - página 30), mas fazendo
+  uso de caixa postal.
+
+  \begin{solution}
+    As modificações efetuadas incluem a criação de mais uma caixa postal
+    para uma comunicação no sentido inverso, ou seja, consumidor-produtor,
+    para que o consumidor possa informar que deseja $N$ mensagens ao
+    produtor, para que assim o produtor as envie. A modificação está
+    disponível juntamente ao arquivo compactado onde este relatório
+    encontra-se originalmente.
+  \end{solution}
+\end{parts}

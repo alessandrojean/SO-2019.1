@@ -1,0 +1,454 @@
+\question
+Política de escalonamento e prioridades.
+
+\begin{parts}
+  \part
+  Compile com a opção \verb|-pthread| e execute o programa \verb|prog1.c|.
+  Veja as opções do programa e execute cada uma delas. É necessário ser
+  usuário \verb|root| para alguma delas.
+
+  \begin{solution}
+    \begin{Verbatim}[label={\$ ./prog1 d}]
+    main()                          Testing Default Scheduling
+    Falha de segmentação (imagem do núcleo gravada)
+    \end{Verbatim}
+
+    \begin{Verbatim}[label={\$ sudo ./prog1 r}, fontsize=\small]
+    main()                          Testing Round-Robin Scheduling
+    main()                          setting priority(1-1) of thread 0 to 1
+    main()                          setting priority(1-1) of thread 1 to 1
+    
+    work_routine()  thread 0        I'm Alive
+    main()                          setting priority(1-1) of thread 2 to 1
+    
+    work_routine()  thread 1        I'm Alive
+    
+    main()                          3 threads created. Main running fifo at max
+    
+    work_routine()  thread 2        I'm Alive
+    
+    work_routine()  thread 2        I'm Proceeding
+    print_count()   thread 2                          78
+    work_routine()  thread 0        I'm Proceeding
+    print_count()   thread 2           6              82
+    work_routine()  thread 1        I'm Proceeding
+    print_count()   thread 1        96778   99998   99794
+    work_routine()  thread 1        my count 100000, total_count 100000
+    print_count()   thread 0        97038    196    99998
+    work_routine()  thread 2        my count 100000, total_count 200000
+    print_count()   thread 1        99998   3394    2982
+    [...]
+    work_routine()  thread 1        my count 400000, total_count 1000000
+    print_count()   thread 2        99998   4096    91806
+    work_routine()  thread 0        my count 400000, total_count 1000000
+    
+    workroutine()   thread 0        I'm done
+    print_count()   thread 2                4130    91856
+    main()                          joined to thread 0 
+    print_count()   thread 1                12246   99998
+    work_routine()  thread 2        my count 400000, total_count 1000000
+    
+    workroutine()   thread 2        I'm done
+    print_count()   thread 1                99998
+    work_routine()  thread 1        my count 500000, total_count 1000000
+    
+    workroutine()   thread 1        I'm done
+    
+    main()                          joined to thread 1 
+    
+    main()                          joined to thread 2 
+    main()                          all 3 threads have finished. 
+    main()                          total_count 1000000
+    main()                          thread 0, count 400000 percent 0.400000
+    main()                          thread 1, count 500000 percent 0.500000
+    main()                          thread 2, count 400000 percent 0.400000
+    \end{Verbatim}
+    \vspace{0.1em}
+    \begin{Verbatim}[label={\$ sudo ./prog1 t}, fontsize=\small]
+    main()                          Testing Round-Robin/Priority Scheduling
+    main()                          setting priority(1-6) of thread 0 to 1
+    main()                          setting priority(1-6) of thread 1 to 3
+    
+    work_routine()  thread 0        I'm Alive
+    main()                          setting priority(1-6) of thread 2 to 6
+    
+    work_routine()  thread 1        I'm Alive
+    
+    main()                          3 threads created. Main running fifo at max
+    
+    work_routine()  thread 2        I'm Alive
+    
+    work_routine()  thread 2        I'm Proceeding
+    print_count()   thread 2                           0
+    work_routine()  thread 1        I'm Proceeding
+    print_count()   thread 1                  10       4
+    work_routine()  thread 0        I'm Proceeding
+    print_count()   thread 0        77018   89026   99998
+    work_routine()  thread 2        my count 100000, total_count 100000
+    print_count()   thread 2        87254   99998   13400
+    work_routine()  thread 1        my count 100000, total_count 200000
+    print_count()   thread 0        99998   14450   30414
+    [...]
+    work_routine()  thread 2        my count 400000, total_count 1000000
+    print_count()   thread 2        56346   99998   63620
+    work_routine()  thread 1        my count 400000, total_count 1000000
+    
+    workroutine()   thread 1        I'm done
+    print_count()   thread 2        92910           99998
+    work_routine()  thread 2        my count 500000, total_count 1000000
+    
+    workroutine()   thread 2        I'm done
+    print_count()   thread 0        99998
+    work_routine()  thread 0        my count 400000, total_count 1000000
+    
+    workroutine()   thread 0        I'm done
+    
+    main()                          joined to thread 0 
+    
+    main()                          joined to thread 1 
+    
+    main()                          joined to thread 2 
+    main()                          all 3 threads have finished. 
+    main()                          total_count 1000000
+    main()                          thread 0, count 400000 percent 0.400000
+    main()                          thread 1, count 400000 percent 0.400000
+    main()                          thread 2, count 500000 percent 0.500000
+    \end{Verbatim}
+    \vspace{0.1em}
+    \begin{Verbatim}[label={\$ sudo ./prog1 f}, fontsize=\small]
+    main()                          Testing FIFO Scheduling
+    main()                          setting priority(1-1) of thread 0 to 1
+    main()                          setting priority(1-1) of thread 1 to 1
+    
+    work_routine()  thread 0        I'm Alive
+    main()                          setting priority(1-1) of thread 2 to 1
+    
+    work_routine()  thread 1        I'm Alive
+    
+    main()                          3 threads created. Main running fifo at max
+    
+    work_routine()  thread 2        I'm Alive
+    
+    work_routine()  thread 2        I'm Proceeding
+    print_count()   thread 2                           2
+    work_routine()  thread 1        I'm Proceeding
+    print_count()   thread 1                  16       8
+    work_routine()  thread 0        I'm Proceeding
+    print_count()   thread 2        97568   97726   99998
+    work_routine()  thread 2        my count 100000, total_count 100000
+    print_count()   thread 2        99392   99998   2420
+    work_routine()  thread 1        my count 100000, total_count 200000
+    print_count()   thread 0        99998    728    3066
+    [...]
+    work_routine()  thread 1        my count 400000, total_count 1000000
+    print_count()   thread 0        97482    648    99998
+    work_routine()  thread 2        my count 400000, total_count 1000000
+    
+    workroutine()   thread 2        I'm done
+    print_count()   thread 0        99998   3272
+    work_routine()  thread 0        my count 400000, total_count 1000000
+    
+    workroutine()   thread 0        I'm done
+    print_count()   thread 1                3364
+    main()                          joined to thread 0 
+    print_count()   thread 1                99998
+    work_routine()  thread 1        my count 500000, total_count 1000000
+    
+    workroutine()   thread 1        I'm done
+    
+    main()                          joined to thread 1 
+    
+    main()                          joined to thread 2 
+    main()                          all 3 threads have finished. 
+    main()                          total_count 1000000
+    main()                          thread 0, count 400000 percent 0.400000
+    main()                          thread 1, count 500000 percent 0.500000
+    main()                          thread 2, count 400000 percent 0.400000
+    \end{Verbatim}
+    \vspace{0.1em}
+    \begin{Verbatim}[label={\$ sudo ./prog1 p}, fontsize=\small]
+    main()                          Testing FIFO/Priority Scheduling
+    main()                          setting priority(1-6) of thread 0 to 1
+    main()                          setting priority(1-6) of thread 1 to 3
+    
+    work_routine()  thread 0        I'm Alive
+    main()                          setting priority(1-6) of thread 2 to 6
+    
+    work_routine()  thread 1        I'm Alive
+    
+    main()                          3 threads created. Main running fifo at max
+    
+    work_routine()  thread 2        I'm Alive
+    
+    work_routine()  thread 2        I'm Proceeding
+    print_count()   thread 2                          16
+    work_routine()  thread 1        I'm Proceeding
+    print_count()   thread 2                 420      18
+    work_routine()  thread 0        I'm Proceeding
+    print_count()   thread 1        80862   96224   99998
+    work_routine()  thread 2        my count 100000, total_count 100000
+    print_count()   thread 2        84170   99998   3104
+    work_routine()  thread 1        my count 100000, total_count 200000
+    print_count()   thread 0        99998   18118   23976
+    [...]
+    work_routine()  thread 2        my count 400000, total_count 1000000
+    print_count()   thread 1        42636   99998   39172
+    work_routine()  thread 1        my count 400000, total_count 1000000
+    
+    workroutine()   thread 1        I'm done
+    print_count()   thread 2        99998           98594
+    work_routine()  thread 0        my count 400000, total_count 1000000
+    
+    workroutine()   thread 0        I'm done
+    print_count()   thread 2                        98678
+    main()                          joined to thread 0 
+    
+    main()                          joined to thread 1 
+    print_count()   thread 2                        99998
+    work_routine()  thread 2        my count 500000, total_count 1000000
+    
+    workroutine()   thread 2        I'm done
+    
+    main()                          joined to thread 2 
+    main()                          all 3 threads have finished. 
+    main()                          total_count 1000000
+    main()                          thread 0, count 400000 percent 0.400000
+    main()                          thread 1, count 400000 percent 0.400000
+    main()                          thread 2, count 500000 percent 0.500000  
+    \end{Verbatim}
+  \end{solution} 
+\end{parts}
+
+\question
+Uso de variáveis de condição.
+
+\begin{parts}
+  \part
+  Compile com a opção \verb|-pthread| e execute o programa \verb|prog2.c|.
+  Explique o uso das variáveis de condição no código do programa.
+
+  \begin{solution}
+    Variáveis de condição são interessantes para indicar uma ocorrência
+    de semáforos etc. Para evitar condições de corrida, usa-se o 
+    \emph{Mutex} do \emph{Pthread}, com variáveis de condição, implementando
+    um método de exclusão mútua, permitindo proteger tais áreas. A sinalização 
+    entre os dois \emph{threads}, de produtor e consumidor, é feito através 
+    das variáveis de condição, bloqueando e esperando ser acordado. Quando o 
+    \emph{buffer} do produtor enche, o produtor é bloqueado e sinaliza o 
+    consumidor para  consumir os itens. Ao consumir todos os itens e esvaziar
+    o \emph{buffer}, o consumidor é bloqueado e sinaliza o produtor para
+    produzir mais itens.
+
+    \begin{Verbatim}[label={\$ ./prog2}]
+    Consumidor iniciando...
+    Produtor iniciando...
+    Buffer vazio -- consumidor aguardando...
+    item 0 inserido (valor=77)
+    item 1 inserido (valor=15)
+    item 2 inserido (valor=93)
+    item 3 inserido (valor=35)
+    item 4 inserido (valor=86)
+    item 5 inserido (valor=92)
+    item 6 inserido (valor=21)
+    item 7 inserido (valor=27)
+    Buffer cheio -- produtor aguardando...
+    Consumidor reiniciando...
+    item 7 removido (valor=27)
+    item 6 removido (valor=21)
+    item 5 removido (valor=92)
+    item 4 removido (valor=86)
+    item 3 removido (valor=35)
+    item 2 removido (valor=93)
+    item 1 removido (valor=15)
+    item 0 removido (valor=77)
+    Buffer vazio -- consumidor aguardando...
+    Produtor reiniciando...
+    [...]
+    \end{Verbatim}
+  \end{solution}
+\end{parts}
+
+\question
+Impasse.
+
+\begin{parts}
+  \part
+  Compile com a opção \verb|-pthread| e execute o programa \verb|prog3.c|.
+  O que aconteceu na saída? Justifique.
+
+  \begin{solution}
+    Os filósofos pegam inicialmente o garfo da esquerda, não
+    conseguindo pegar o da direita posteriormente, gerando
+    um \emph{deadlock}. Isto acontece pois na hora que todos pegam
+    o garfo esquerdo, não há a possibilidade de pegar o garfo
+    direito já que está sendo usado pelo filósofo ao lado.
+
+    \begin{Verbatim}[label={\$ ./prog3}]
+    - H - T - T - T - T - T - T - T - T - T -
+    - H - H - T - T - T - T - T - T - T - T -
+    - H - H - H - T - T - T - T - T - T - T -
+    - H - H - H - H - T - T - T - T - T - T -
+    - H - H - H - H - T - T - H - T - T - T -
+    - H - H - H - H - T - T - H - H - T - T -
+    - H - H - H - H - T - T - H - H - H - T -
+    - H - H - H - H - T - H - H - H - H - T -
+    - H - H - H - H - T - H - H - H - H - H -
+    - H - H - H - H - H - H - H - H - H - H -
+     |H - H - H - H - H - H - H - H - H - H  
+     |H - H  |H - H - H - H - H - H - H - H  
+     |H - H  |H  |H - H - H - H - H - H - H  
+     |H  |H  |H  |H - H - H - H - H - H - H  
+     |H  |H  |H  |H - H - H - H  |H - H - H  
+     |H  |H  |H  |H - H - H  |H  |H - H - H  
+     |H  |H  |H  |H - H - H  |H  |H - H  |H  
+     |H  |H  |H  |H - H - H  |H  |H  |H  |H  
+     |H  |H  |H  |H - H  |H  |H  |H  |H  |H  
+     |H  |H  |H  |H  |H  |H  |H  |H  |H  |H 
+    \end{Verbatim}
+  \end{solution}
+
+  \part
+  Compile com a opção \verb|-pthread| e execute o programa \verb|prog4.c|,
+  que é baseado na Figura 2.38 do livro texto. O problema do programa
+  anterior foi resolvido? Justifique.
+
+  \begin{solution}
+    Sim, o problema do programa anterior foi resolvido evitando
+    condições de corrida através de dois semáforos, onde quando
+    há o \emph{down} no \emph{mutex}, garante exclusivamente os 
+    garfos para o filósofo. Há também um semáforo exclusivo para 
+    cada filósofo para evitar a mudança de estados enquanto seus 
+    vizinhos tiverem garfos em mão.
+
+    \begin{Verbatim}[label={\$ ./prog4}]
+    T T T T T T T T T T T 
+    H T T T T T T T T T T 
+    E T T T T T T T T T T 
+    E T T T T H T T T T T 
+    E T T T T E T T T T T 
+    E T T H T E T T T T T 
+    E T T E T E T T T T T 
+    E T T E T E T H T T T 
+    E T T E T E T E T T T 
+    E T T E T E H E T T T 
+    E T T E H E H E T T T 
+    [...]
+    Total de refeicoes: 
+    Filosofo 0: 10
+    Filosofo 1: 9
+    Filosofo 2: 9
+    Filosofo 3: 9
+    Filosofo 4: 9
+    Filosofo 5: 9
+    Filosofo 6: 9
+    Filosofo 7: 9
+    Filosofo 8: 9
+    Filosofo 9: 9
+    Filosofo 10: 9
+    \end{Verbatim}
+  \end{solution}
+\end{parts}
+
+\question
+Inanição (\emph{starvation}) e desempenho.
+
+\begin{parts}
+  \part
+  Compile com a opção \verb|-pthread| e execute o programa \verb|prog5.c|.
+  O que aconteceu na saída? Justifique.
+
+  \begin{solution}
+    Os leitores tentam inicialmente ler seu valor na base de dados,
+    bloqueando a escrita e leitura na base, onde somente quando todos
+    os leitores tiverem usado a base os escritores serão permitidos
+    para escrever tais valores, fazendo com que os escritores sofram
+    de inanição. Em resumo, os escritores só conseguem entrar se
+    não tiver nenhum leitor ativo no momento.
+
+    \begin{Verbatim}[label={\$ time ./prog5}]
+    Leitor 0 leu o valor -1 
+    Leitor 4 leu o valor -1 
+    Leitor 1 leu o valor -1 
+    Leitor 2 leu o valor -1 
+    [...]
+    Leitor 146 leu o valor -1 
+    Escritor 0 escreveu o valor 0 
+    Escritor 1 escreveu o valor 1 
+    Escritor 3 escreveu o valor 3 
+    Escritor 4 escreveu o valor 4 
+    Escritor 5 escreveu o valor 5 
+    [...]
+
+    real    2m34.030s
+    user    0m0.008s
+    sys     0m0.008s
+    \end{Verbatim}
+  \end{solution}
+
+  \part
+  Compile com a opção \verb|-pthread| e execute o programa \verb|prog6.c|.
+  O problema do programa anterior foi resolvido? Há espaço para melhoria
+  de desempenho da leitura no código?
+
+  \begin{solution}
+    A inanição foi resolvida, no entanto o paralelismo da leitura
+    foi perdido, ainda não resolvendo o problema de desempenho.
+    Leitores e escritores estão competindo de forma aproximadamente
+    equalitária.
+
+    \begin{Verbatim}[label={\$ time ./prog6}]
+    Leitor 0 leu o valor -1 
+    Escritor 0 escreveu o valor 0 
+    Leitor 1 leu o valor 0 
+    Leitor 2 leu o valor 0 
+    Leitor 3 leu o valor 0 
+    Leitor 4 leu o valor 0 
+    Escritor 1 escreveu o valor 1 
+    Escritor 2 escreveu o valor 2 
+    Leitor 5 leu o valor 2 
+    Leitor 6 leu o valor 2 
+    Escritor 3 escreveu o valor 3 
+    Leitor 7 leu o valor 3 
+    Escritor 4 escreveu o valor 4 
+    Leitor 8 leu o valor 4 
+    Leitor 9 leu o valor 4 
+    Escritor 5 escreveu o valor 5
+    [...]
+
+    real    5m0.045s
+    user    0m0.000s
+    sys     0m0.020s
+    \end{Verbatim}
+  \end{solution}
+
+  \part
+  Compile com a opção \verb|-pthread| e execute o programa \verb|prog7.c|.
+  Houve melhoria de desempenho na leitura em relação ao programa anterior?
+  Justifique.
+
+  \begin{solution}
+    Sim, houve melhorias com a utilização de variáveis de condição
+    que permitem que haja um paralelismo. Quando não há mais nenhum
+    leitor, é sinalizado que os escritores, que tem acesso exclusivo,
+    podem utilizar a base de dados. Desta maneira, os leitores
+    mantém seu paralelismo, sendo a solução correta para o problema.
+
+    \begin{Verbatim}[label={\$ time ./prog7}]
+    Leitor 0 leu o valor -1 
+    Leitor 2 leu o valor -1 
+    Leitor 3 leu o valor -1 
+    Leitor 4 leu o valor -1 
+    Escritor 1 escreveu o valor 1 
+    Escritor 2 escreveu o valor 2 
+    Leitor 5 leu o valor 2 
+    Leitor 6 leu o valor 2 
+    Escritor 3 escreveu o valor 3 
+    Escritor 4 escreveu o valor 4
+    [...]
+
+    real    3m49.038s
+    user    0m0.012s
+    sys     0m0.012s
+    \end{Verbatim}
+  \end{solution}
+\end{parts}
