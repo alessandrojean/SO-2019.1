@@ -8,7 +8,7 @@ Algorithms written in the laboratory classes of Operating Systems
 [year]: https://img.shields.io/badge/year-2019.1-blue.svg?style=flat-square
 [id]: https://img.shields.io/badge/id-MCTA026--13-yellowgreen.svg?style=flat-square
 [tpi]: https://img.shields.io/badge/T--P--I-3--1--4-lightgrey.svg?style=flat-square
-[last-class]: https://img.shields.io/badge/last_class-2019.04.22-green.svg?style=flat-square
+[last-class]: https://img.shields.io/badge/last_class-2019.04.24-green.svg?style=flat-square
 [language]: https://img.shields.io/badge/language-C-yellow.svg?style=flat-square
 [ide]: https://img.shields.io/badge/IDE-VSCode-orange.svg?style=flat-square
 
@@ -38,8 +38,10 @@ Algorithms written in the laboratory classes of Operating Systems
 - **15/04/2019** *(Theory)*: Disk Formatting, Arm Scheduling Algorithms,
       Error Handling and Clocks.
 - **17/04/2019** *(Laboratory)*: [File Systems in Linux].
-- **22/04/2018** *(Theory)*: User Interfaces: Keyboard, Mouse, Monitor;
+- **22/04/2019** *(Theory)*: User Interfaces: Keyboard, Mouse, Monitor;
       Thin Clients and Power Management.
+- **24/04/2019** *(Theory)*: Deadlocks: Resources, Conditions for Resource
+      Deadlocks, The Ostrich Algorithm and Deadlock Detection and Recovery.
 
 [First Case Study: Linux]: laboratory/2019.02.27/
 [Scheduling in Linux]: laboratory/2019.03.13/
