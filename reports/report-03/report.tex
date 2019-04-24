@@ -1,0 +1,416 @@
+% !TeX program = xelatex
+% !TeX encoding = UTF-8
+\documentclass[a4paper, 11pt, answers]{exam}
+
+\usepackage[brazil]{babel}
+\let\latinencoding\relax
+\usepackage[T1]{fontenc}
+
+\usepackage[no-math]{fontspec}
+\usepackage{newpxtext, newpxmath}
+\usepackage[a4paper, margin=2cm]{geometry}
+
+\usepackage{siunitx}
+\usepackage{fancyvrb}
+\usepackage{graphicx}
+
+\input{definition.tex}
+
+\title{\titulo}
+\author{\nomeAutorUm e \nomeAutorDois}
+\date{\today}
+
+\footer{}{}{\thepage}
+
+\sisetup{
+  binary-units = true
+}
+
+\renewcommand{\solutiontitle}{}
+
+\fvset{
+  gobble = 8,
+  frame = single
+}
+
+\newcommand{\printtitle}{
+  \begin{center}
+    {\Large \scshape \titulo}\\[1em]
+    {\nomeAutorUm, \raAutorUm}\\
+    {\nomeAutorDois, \raAutorDois}\\[1em]
+    Professor: Dr\@. \nomeProfessor, \centroProfessor\\
+    {\itshape \campusFaculdade}
+  \end{center}
+}
+
+\begin{document}
+  \printtitle
+
+  \begin{questions}
+    \question
+    Leitura e escrita em arquivos.
+
+    \begin{parts}
+      \part
+      Compile e execute o programa \verb|prog1.c|. Digite sequências de
+      caracteres no terminal seguido de \verb|ENTER|. O que o programa
+      faz? Por que ele não tem \verb|include|? Por que não é preciso abrir
+      os descritores da entrada e saída padrão?
+
+      \begin{solution}
+        O programa pega a entrada do usuário da entrada padrão
+        e a escreve na tela utilizando a saída padrão. Não há a 
+        existência de \verb|include| pois o código realiza chamadas
+        de sistema, não usando funções de bibliotecas, que já estão 
+        disponíveis pelo sistema operacional. Não é preciso abrir os 
+        descritores pois a entrada e saída padrão são abertos por definição.
+
+        \begin{Verbatim}[label={\$ ./prog1}]
+        Este   
+        Este
+        eh
+        eh
+        um
+        um
+        teste
+        teste
+        \end{Verbatim}
+      \end{solution}
+    \end{parts}
+
+    \question
+    Remoção de arquivos.
+
+    \begin{parts}
+      \part
+      Compile e execute o programa \verb|prog2.c|. Digite uma sequência de
+      caracteres seguido de \verb|ENTER|. O que acontece com o arquivo
+      \verb|temp.txt| no diretório corrente?
+
+      \begin{solution}
+        O arquivo recebe o conteúdo que foi digitado. Agora utiliza-se
+        funções de biblioteca para a manipulação da entrada do usuário
+        e para a escrita no arquivo \verb|temp.txt|. Utiliza-se também
+        \emph{flags} para determinação de leitura e escrita no arquivo.
+        O programa dá as opções de deletar o arquivo, através de
+        \verb|unlink|, escrever no arquivo ou ler seu conteúdo.
+        Quando o programa é encerrado, ao executar novamente, por
+        causa da \emph{flag truncate}, seu conteúdo será apagado.
+        
+        \begin{Verbatim}[label={\$ ./prog2}]
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: este
+        Grava e retorna ao loop apos comando: este 
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: eh
+        Grava e retorna ao loop apos comando: eh 
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: um
+        Grava e retorna ao loop apos comando: um 
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: teste
+        Grava e retorna ao loop apos comando: teste 
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: print
+        este
+        eh
+        um
+        teste
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: quit
+        \end{Verbatim}
+      \end{solution}
+
+      \part
+      Crie um \emph{hard link} do arquivo \verb|temp.txt| com o comando
+      \verb|ln temp.txt clone.txt|. Em seguida, entre com o comando
+      \verb|ls -i *.txt|. \verb|temp.txt| e \verb|clone.txt| são o 
+      mesmo arquivo? Justifique.
+
+      \begin{solution}
+        Ambos são o mesmo arquivo já que possuem o mesmo número
+        de identificação pelo \emph{i-node}. Como ambos possuem o
+        mesmo número (\verb|5014739|), são o mesmo arquivo.
+
+        \begin{Verbatim}[label={\$ ls -i *.txt}]
+        5014739 clone.txt*  5014739 temp.txt*
+        \end{Verbatim}
+      \end{solution}
+
+      \part
+      Digite o comando \verb|unlink| na entrada de \verb|prog2.c|. 
+      O que aconteceu? O arquivo \verb|clone.txt| ainda existe? Justifique.
+
+      \begin{solution}
+        O arquivo não foi removido pois ainda há uma referência do arquivo
+        no \verb|clone.txt|. Como o contador não chegou em zero, já que ainda
+        há um arquivo referenciando \verb|temp.txt|, então o arquivo não
+        é removido.
+
+        \begin{Verbatim}[label={\$ ./prog2}]
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: unlink
+        Unlink executado apos comando: unlink 
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: quit
+        \end{Verbatim}
+
+      \end{solution}
+
+      \part
+      Digite uma sequência de caracteres seguido de \verb|ENTER|. O que
+      acontece com o arquivo \verb|clone.txt| no diretório corrente? Por que
+      é ainda possível ler o arquivo completo?
+
+      \begin{solution}
+        O arquivo \verb|clone.txt| é preenchido com os conteúdos digitados
+        no programa ainda, mesmo que o original \verb|temp.txt| tenha sido
+        removido. Ainda é possível ler o arquivo completo pois
+        a chamada \verb|open| analisa o arquivo em si, mesmo que seu
+        caminho tenha sido mudado.
+
+        \begin{Verbatim}[label={\$ ./prog2}]
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: teste
+        Grava e retorna ao loop apos comando: teste 
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: teste2
+        Grava e retorna ao loop apos comando: teste2 
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: unlink
+        Unlink executado apos comando: unlink 
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: teste3
+        Grava e retorna ao loop apos comando: teste3 
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: print
+        teste
+        teste2
+        teste3
+        Digite unlink para chamada unlink, print para imprimir conteúdo e quit 
+        para encerrar o programa: quit
+        \end{Verbatim}
+
+      \end{solution}
+
+      \part
+      Em que outras situações é interessante esse comportamento do 
+      \verb|unlink|?
+
+      \begin{solution}
+        É interessante utilizar o \verb|unlink| para arquivos temporários.
+        Caso o processo morra, os arquivos temporários nas quais foram
+        utilizados o \verb|unlink| são removidos do sistema.
+      \end{solution}
+    \end{parts}
+
+    \question
+    Uso de \emph{buffers}.
+
+    \begin{parts}
+      \part
+      Compile e execute o programa \verb|prog3.c| com o seguinte comando
+      \verb|/usr/bin/time -v CMD|, em que \verb|CMD| é o arquivo a ser
+      executado. Verifique os gastos de tempo de CPU de saídas para o 
+      sistema de arquivos, além do número de trocas de contexto voluntárias.
+
+      \begin{solution}
+        O programa possui execução rápida pois escreve-se os mil
+        bytes em sequência, sem a utilização de \verb|fsync|. Como
+        bloqueia-se apenas uma única vez, a execução torna-se
+        rápida.
+
+        \begin{Verbatim}[label={\$ time -v ./prog3}]
+        Command being timed: "./prog3"
+        User time (seconds): 0.00
+        System time (seconds): 0.00
+        Percent of CPU this job got: 0%
+        Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
+        Average shared text size (kbytes): 0
+        Average unshared data size (kbytes): 0
+        Average stack size (kbytes): 0
+        Average total size (kbytes): 0
+        Maximum resident set size (kbytes): 1172
+        Average resident set size (kbytes): 0
+        Major (requiring I/O) page faults: 0
+        Minor (reclaiming a frame) page faults: 57
+        Voluntary context switches: 1
+        Involuntary context switches: 2
+        Swaps: 0
+        File system inputs: 0
+        File system outputs: 8
+        Socket messages sent: 0
+        Socket messages received: 0
+        Signals delivered: 0
+        Page size (bytes): 4096
+        Exit status: 0     
+        \end{Verbatim}
+      \end{solution}
+
+      \part
+      Compile e execute o programa \verb|prog4.c| com o seguinte comando
+      \verb|/usr/bin/time -v CMD|, em que \verb|CMD| é o arquivo a ser 
+      executado. Verifique os gastos de tempo de CPU de saídas para o 
+      sistema de arquivos, além do número de trocas de contexto voluntárias.
+      Por que o tempo da execução desse programa é muito maior do que
+      o tempo de execução do programa anterior?
+
+      \begin{solution}
+        O programa passou mais tempo bloqueado do que fazendo processamento.
+        A lentidão não é relacionada a falta de página. Este programa possui
+        muitas mudanças de contexto. Cada vez que há uma chamada de 
+        \verb|fsync| obriga-se o programa a realizar a saída, bloqueando-o 
+        fazendo com que o escalonador escalone outro programa durante. Como 
+        há mil chamadas de \verb|fsync|, o programa torna-se lento. Em 
+        comparação ao \verb|prog3|, há somente um bloqueio pois escreve-se 
+        apenas uma vez os mil bytes no disco.
+
+        \begin{Verbatim}[label={\$ time -v ./prog4}]
+        Command being timed: "./prog4"
+        User time (seconds): 0.00
+        System time (seconds): 0.11
+        Percent of CPU this job got: 0%
+        Elapsed (wall clock) time (h:mm:ss or m:ss): 0:36.08
+        Average shared text size (kbytes): 0
+        Average unshared data size (kbytes): 0
+        Average stack size (kbytes): 0
+        Average total size (kbytes): 0
+        Maximum resident set size (kbytes): 1176
+        Average resident set size (kbytes): 0
+        Major (requiring I/O) page faults: 0
+        Minor (reclaiming a frame) page faults: 57
+        Voluntary context switches: 2002
+        Involuntary context switches: 1
+        Swaps: 0
+        File system inputs: 0
+        File system outputs: 8000
+        Socket messages sent: 0
+        Socket messages received: 0
+        Signals delivered: 0
+        Page size (bytes): 4096
+        Exit status: 0   
+        \end{Verbatim}
+      \end{solution}
+    \end{parts}
+
+    \question
+    Obtenção dos atributos de um arquivo.
+
+    \begin{parts}
+      \part
+      Compile, ignorando os avisos da compilação, e execute o programa
+      \verb|prog5.c| passando como parâmetro um arquivo qualquer do sistema
+      de arquivos. Que informações ele me retorna? Guarde a saída da
+      execução em diferentes tipos de arquivos para mostrar no relatório.
+
+      \begin{solution}
+        O programa mostra uma série de informações do arquivo tal como 
+        seu tipo, usuário, grupo do usuário, permissão, tamanho,
+        data de modificação, \emph{bits} de proteção etc.
+
+        \begin{Verbatim}[label={\$ ./prog5 prog1.c}, fontsize=\small]
+        prog1.c e' um arquivo regular 
+
+        userid 1000, groupid 1000, permissao 100664, link(s) 1 
+        tamanho 86 (bytes), 8 (blocos), Inode # 5006667 
+        
+        Dados de prog1.c foram modificados pela ultima vez em Wed Apr 17 08:08:14 2019
+        
+        Leitura permitida
+        Escrita permitida
+        Execucao proibida
+        \end{Verbatim}
+
+        \begin{Verbatim}[label={\$ ./prog5 .}, fontsize=\small]
+        . e' um arquivo diretorio 
+
+        userid 1000, groupid 1000, permissao 40775, link(s) 3 
+        tamanho 4096 (bytes), 8 (blocos), Inode # 5003756 
+        
+        Dados de . foram modificados pela ultima vez em Wed Apr 17 09:12:17 2019
+        
+        Leitura permitida
+        Escrita permitida
+        Execucao permitida
+        \end{Verbatim}
+      \end{solution}
+    \end{parts}
+
+    \question
+    Comando \verb|stat|.
+
+    \begin{parts}
+      \part
+      O comando \verb|stat| tem função similar ao \verb|prog5.c|. Repita 
+      a execução com esse comando, usando como entrada os mesmos arquivos do
+      execício 4.1.
+
+      \begin{solution}
+        O comando retorna atributos e informações do arquivo como o 
+        \verb|prog5|.
+
+        \begin{Verbatim}[label={\$ stat prog1.c}, fontsize=\small]
+          Arquivo: 'prog1.c'
+          Tamanho: 86           Blocos: 8          Bloco IO: 4096   arquivo comum
+        Dispositivo: 805h/2053d Inode: 5006667     Links: 1
+        Acesso: (0664/-rw-rw-r--)  Uid: ( 1000/   ufabc)   Gid: ( 1000/   ufabc)
+        Acessar: 2019-04-17 08:08:15.737457650 -0300
+        Modificar: 2019-04-17 08:08:14.057482272 -0300
+        Alterar: 2019-04-17 08:08:14.057482272 -0300
+          Nascimento: -
+        \end{Verbatim}
+
+        \begin{Verbatim}[label={\$ stat .}, fontsize=\small]
+          Arquivo: '.'
+          Tamanho: 4096         Blocos: 8          Bloco IO: 4096   diretório
+        Dispositivo: 805h/2053d Inode: 5003756     Links: 3
+        Acesso: (0775/drwxrwxr-x)  Uid: ( 1000/   ufabc)   Gid: ( 1000/   ufabc)
+        Acessar: 2019-04-17 09:12:17.697057433 -0300
+        Modificar: 2019-04-17 09:12:17.681057243 -0300
+        Alterar: 2019-04-17 09:12:17.681057243 -0300
+          Nascimento: -
+        \end{Verbatim}
+      \end{solution}
+    \end{parts}
+
+    \question
+    Lista de arquivos em um diretório.
+
+    \begin{parts}
+      \part
+      Compile e execute o programa \verb|prog6.c| passando como parâmetro de
+      entrada diversos diretórios do sistema de arquivo. Com base nas
+      saídas, explique como funciona a organização dos arquivos em
+      um diretório no Linux.
+
+      \begin{solution}
+        Um diretório no Linux possui diversas entradas que possuem informações
+        como o número do \emph{i-node}, tamanho, nome e tipo. A organização, 
+        resumidamente é uma lista que possui os nomes e o número de 
+        \emph{i-node}, permitindo a estruturação do sistema de arquivos.
+
+        \begin{Verbatim}[label={\$ ./prog6 .}]
+        prog6.c (Inode 5007270)
+        prog2.c (Inode 5007262)
+        prog3.c (Inode 5007265)
+        testeNoSync.txt (Inode 5010961)
+        .. (Inode 4983190)
+        answers.md (Inode 5010964)
+        .vscode (Inode 5010945)
+        . (Inode 5003756)
+        prog5 (Inode 5014743)
+        prog4.c (Inode 5007268)
+        prog4 (Inode 5014735)
+        prog1 (Inode 5007276)
+        clone.txt (Inode 5010774)
+        prog2 (Inode 5014736)
+        prog5.c (Inode 5007269)
+        prog6 (Inode 5015536)
+        prog1.c (Inode 5006667)
+        prog3 (Inode 5014738)
+        testeSync.txt (Inode 5015535)
+        \end{Verbatim}
+      \end{solution}
+    \end{parts}
+  \end{questions}
+\end{document}
