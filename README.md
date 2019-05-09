@@ -8,7 +8,7 @@ Algorithms written in the laboratory classes of Operating Systems
 [year]: https://img.shields.io/badge/year-2019.1-blue.svg?style=flat-square
 [id]: https://img.shields.io/badge/id-MCTA026--13-yellowgreen.svg?style=flat-square
 [tpi]: https://img.shields.io/badge/T--P--I-3--1--4-lightgrey.svg?style=flat-square
-[last-class]: https://img.shields.io/badge/last_class-2019.05.07-green.svg?style=flat-square
+[last-class]: https://img.shields.io/badge/last_class-2019.05.09-green.svg?style=flat-square
 [language]: https://img.shields.io/badge/language-C-yellow.svg?style=flat-square
 [ide]: https://img.shields.io/badge/IDE-VSCode-orange.svg?style=flat-square
 
@@ -44,6 +44,7 @@ Algorithms written in the laboratory classes of Operating Systems
       Deadlocks, The Ostrich Algorithm and Deadlock Detection and Recovery.
 - **29/04/2019** *(Theory)*: Deadlock Avoidance, Prevention and Other Issues.
 - **07/05/2019** *(Theory)*: Multiple Processor Systems.
+- **09/05/2019** *(Theory)*: **Second test**.
 
 [First Case Study: Linux]: laboratory/2019.02.27/
 [Scheduling in Linux]: laboratory/2019.03.13/
